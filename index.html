@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5f0">
+<title>Où j'en suis</title>
+<style>
+:root{--bg:#f7f5f0;--card:#fff;--ink:#282d29;--muted:#737970;--accent:#426b58;--line:#e5e5dc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px -apple-system,BlinkMacSystemFont,sans-serif;line-height:1.5}
+main{max-width:650px;margin:auto;padding:22px 17px 50px}
+header{padding:18px 3px 24px}h1{font-size:30px;letter-spacing:-1px;margin:0}h2{font-size:23px;line-height:1.2;margin:8px 0 12px}p{margin:8px 0 14px}.muted{color:var(--muted);font-size:14px}
+nav{display:flex;gap:4px;overflow:auto;border-bottom:1px solid var(--line);margin-bottom:20px}
+nav button{flex:1;min-width:65px;border:0;border-bottom:3px solid transparent;padding:12px 4px;background:none;color:var(--muted);font-size:13px}
+nav button.active{color:var(--accent);border-color:var(--accent);font-weight:700}
+section{display:none}section.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:13px}
+.eyebrow{text-transform:uppercase;letter-spacing:1.5px;font-size:11px;color:var(--muted);font-weight:700}
+button.primary{background:var(--accent);color:white;border:0;border-radius:12px;padding:14px;font-size:15px;font-weight:650;width:100%;margin-top:12px}
+button.option{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px;margin:8px 0;color:var(--ink)}
+button.option.selected{border:2px solid var(--accent);background:#eaf0e9}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=text],textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px;background:var(--card);color:var(--ink);font:inherit;margin:5px 0 14px}
+label{font-size:14px;font-weight:650;display:block;margin-top:10px}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.small{font-size:12px;color:var(--muted)}.score{font-weight:700;color:var(--accent)}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
+</style>
+</head>
+<body>
+<main>
+<header><div class="eyebrow">Ton espace personnel</div><h1>Où j'en suis <span>🌱</span></h1><p class="muted">Comprendre. Faire le tri. Avancer à ton rythme.</p></header>
+<nav>
+<button class="active" data-tab="accueil">Accueil</button>
+<button data-tab="bilan">Mon bilan</button>
+<button data-tab="explorer">Explorer</button>
+<button data-tab="plan">Mon plan</button>
+</nav>
+<section id="accueil" class="active">
+<div class="card"><div class="eyebrow">Un point de départ</div><h2>Tu n'as pas besoin d'avoir toutes les réponses.</h2><p>Commence par comprendre ce qui se passe dans ta vie, ce qui te pèse et ce que tu veux changer.</p><button class="primary" data-go="bilan">Faire le point →</button></div>
+<div class="card"><h2>Qu'est-ce qui t'amène ici ?</h2>
+<button class="option" data-topic="Je me sens perdu et je ne sais pas où je vais.">🧭 Je me sens perdu</button>
+<button class="option" data-topic="J'ai l'impression de stagner et de ne pas avancer.">⛰️ Je stagne</button>
+<button class="option" data-topic="Je ne me sens pas bien sans vraiment comprendre pourquoi.">🌊 Je ne comprends pas ce que je ressens</button>
+<button class="option" data-topic="Je veux changer des choses mais je ne sais pas par où commencer.">🌱 Je veux changer les choses</button></div>
+<div class="card"><div class="eyebrow">Question du jour</div><h2>Qu'est-ce que tu acceptes aujourd'hui alors qu'au fond, ça ne te convient plus ?</h2><textarea id="journal" rows="4" placeholder="Écris librement…"></textarea><button class="primary" id="saveJournal">Garder ma réflexion</button><p class="small" id="journalStatus"></p></div>
+</section>
+<section id="bilan">
+<div class="eyebrow">Étape 1 · Observer</div><h2>Comment va ta vie ?</h2><p class="muted">Note chaque domaine selon ton ressenti actuel. Ce n'est pas un jugement sur ta valeur.</p>
+<div id="ratings"></div><div class="card"><div class="row"><b>Mon ressenti global</b><span class="score" id="average">5/10</span></div><p class="muted">Les notes basses indiquent des domaines à explorer, pas des échecs.</p></div>
+<button class="primary" data-go="explorer">Comprendre ce bilan →</button>
+</section>
+<section id="explorer">
+<div class="eyebrow">Étape 2 · Comprendre</div><h2 id="question">Qu'est-ce qui te préoccupe le plus ?</h2><p class="muted" id="step">Question 1 sur 4</p>
+<div class="card"><div id="choices"></div><label for="answer">Ou réponds avec tes propres mots</label><textarea id="answer" rows="3" placeholder="Ce qui me vient à l'esprit…"></textarea>
+<div class="row"><button class="option" id="back">← Retour</button><button class="primary" id="next" style="width:auto;flex:1">Continuer →</button></div></div>
+<div class="card" id="insight" hidden><div class="eyebrow">Pistes de réflexion</div><h2>Ce que tu peux explorer</h2><div id="insightText"></div><p class="muted">Ce ne sont que des hypothèses. Garde ce qui te paraît juste, laisse le reste.</p><button class="primary" data-go="plan">Choisir une action →</button></div>
+</section>
+<section id="plan">
+<div class="eyebrow">Étape 3 · Avancer</div><h2>Quel est ton prochain petit pas ?</h2><p class="muted">Pas besoin de tout changer d'un coup. Choisis une action concrète.</p>
+<div class="card"><label for="priority">Ma priorité</label><input id="priority" type="text" placeholder="Ex. retrouver confiance en moi">
+<label for="reason">Pourquoi c'est important</label><textarea id="reason" rows="2" placeholder="Ce que je souhaite retrouver ou changer…"></textarea>
+<label for="action">La prochaine action que je peux faire</label><textarea id="action" rows="2" placeholder="Une petite action réalisable…"></textarea>
+<label for="when">Quand vais-je le faire ?</label><input id="when" type="text" placeholder="Ex. demain matin">
+<button class="primary" id="savePlan">Enregistrer mon plan</button><div id="planResult"></div></div>
+<div class="card"><h2>Mes données</h2><p class="muted">Tes notes sont conservées dans le stockage local de ton navigateur sur cet appareil. Elles ne sont pas synchronisées entre tes appareils.</p><button class="option" id="export">Exporter mes réflexions</button><button class="option" id="clear">Effacer mes données locales</button></div>
+</section>
+<footer>Un espace pour mieux te comprendre. Tu gardes le contrôle de tes choix.</footer>
+</main>
+<script>
+const areas=[["Santé et énergie","Sommeil, corps, vitalité"],["État émotionnel","Stress, humeur, paix intérieure"],["Relations","Famille, amis, amour"],["Travail ou études","Motivation et progression"],["Finances","Stabilité et autonomie"],["Confiance en moi","Estime et limites"],["Direction de vie","Envies, valeurs, objectifs"],["Plaisir et liberté","Temps pour moi, joie"]];
+const qs=[
+{q:"Qu'est-ce qui te préoccupe le plus ?",opts:["Je me sens perdu","Je stagne","Je ne me sens pas bien","Je dois prendre une décision","Plusieurs choses à la fois","Autre chose"]},
+{q:"Qu'est-ce qui est le plus difficile ?",opts:["Je ne sais pas quoi faire","Je sais quoi faire mais je n'agis pas","J'ai peur des conséquences","Je ne comprends pas mes émotions","Je me sens seul ou incompris","Je n'arrive pas à accepter la situation"]},
+{q:"Qu'est-ce que cette situation te fait penser ou croire ?",opts:["Que je ne suis pas capable","Que je vais décevoir quelqu'un","Que je risque de perdre quelque chose","Que je ne suis pas à ma place","Que je n'ai pas le contrôle","Je ne sais pas encore"]},
+{q:"De quoi aurais-tu le plus besoin aujourd'hui ?",opts:["De clarté","De repos","De confiance","De soutien","D'un plan concret","D'accepter une situation"]}
+];
+let answers=["","","",""],idx=0,topic="";
+const $=id=>document.getElementById(id);
+function persist(){try{localStorage.setItem("ou-j-en-suis",JSON.stringify({answers,ratings:Object.fromEntries(areas.map(a=>[a[0],$("r-"+a[0]).value])),journal:$("journal").value,priority:$("priority").value,reason:$("reason").value,action:$("action").value,when:$("when").value}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem("ou-j-en-suis")||"{}");answers=d.answers||answers;$("journal").value=d.journal||"";["priority","reason","action","when"].forEach(k=>$(k).value=d[k]||"");return d}catch(e){return {}}}
+const saved=load();
+areas.forEach(([name,desc])=>{const d=document.createElement("div");d.className="card";const row=document.createElement("div");row.className="row";const left=document.createElement("div");const b=document.createElement("b");b.textContent=name;const sub=document.createElement("div");sub.className="small";sub.textContent=desc;left.append(b,sub);const val=document.createElement("span");val.className="score";val.id="v-"+name;row.append(left,val);const r=document.createElement("input");r.type="range";r.min=1;r.max=10;r.value=(saved.ratings||{})[name]||5;r.id="r-"+name;r.addEventListener("input",()=>{val.textContent=r.value+"/10";updateAvg();persist()});d.append(row,r);const ends=document.createElement("div");ends.className="row small";ends.innerHTML="<span>Difficile</span><span>Satisfaisant</span>";d.append(ends);$("ratings").append(d);val.textContent=r.value+"/10"});
+function updateAvg(){let sum=areas.reduce((s,a)=>s+Number($("r-"+a[0]).value),0);$("average").textContent=(sum/areas.length).toFixed(1)+"/10"}updateAvg();
+function show(id){document.querySelectorAll("section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));if(id==="explorer")renderQ();window.scrollTo(0,0)}
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>show(b.dataset.tab));document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));
+document.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{topic=b.dataset.topic;answers[0]=topic;idx=0;show("explorer")});
+function renderQ(){$("question").textContent=qs[idx].q;$("step").textContent="Question "+(idx+1)+" sur 4";$("answer").value=answers[idx]||"";$("choices").innerHTML="";qs[idx].opts.forEach(o=>{const b=document.createElement("button");b.className="option"+(answers[idx]===o?" selected":"");b.textContent=o;b.onclick=()=>{answers[idx]=o;$("answer").value=o;renderQ()};$("choices").append(b)});$("back").style.visibility=idx?"visible":"hidden";$("next").textContent=idx===3?"Explorer mes réponses →":"Continuer →";$("insight").hidden=true}
+$("answer").oninput=()=>{answers[idx]=$("answer").value;persist()};
+$("back").onclick=()=>{if(idx){idx--;renderQ()}};
+$("next").onclick=()=>{answers[idx]=$("answer").value.trim();persist();if(idx<3){idx++;renderQ();return}let t=answers.join(" ").toLowerCase(),out=[];if(/perdu|direction|place|clarté/.test(t))out.push("Tu pourrais avoir besoin de clarifier ce qui compte vraiment pour toi avant de choisir une direction.");if(/peur|décevoir|capable|confiance|conséquences/.test(t))out.push("La peur du résultat ou le regard des autres pourrait compliquer ton passage à l'action.");if(/agis|stagne|plan concret/.test(t))out.push("Transformer un objectif flou en une petite action concrète pourrait t'aider à avancer.");if(/seul|soutien|incompris/.test(t))out.push("Tes relations et le soutien dont tu disposes méritent peut-être davantage d'attention.");if(/repos|fatigue|stress|ne me sens pas bien/.test(t))out.push("Ton énergie et ton état émotionnel peuvent être une priorité avant de chercher à tout résoudre.");if(!out.length)out.push("Prends le temps de nommer ce qui te pèse le plus et ce que cette situation signifie pour toi. Tu n'as pas besoin de trouver la réponse parfaite tout de suite.");$("insightText").replaceChildren(...out.map(s=>{const p=document.createElement("p");p.textContent=s;return p}));$("insight").hidden=false;$("insight").scrollIntoView({behavior:"smooth",block:"nearest"})};
+$("saveJournal").onclick=()=>{persist();$("journalStatus").textContent="Réflexion enregistrée sur cet appareil.";};
+$("savePlan").onclick=()=>{persist();$("planResult").textContent="Ton plan est enregistré sur cet appareil. Un petit pas compte déjà."; $("planResult").className="muted";$("planResult").style.marginTop="12px"};
+["priority","reason","action","when","journal"].forEach(k=>$(k).addEventListener("change",persist));
+$("export").onclick=()=>{persist();const d=JSON.parse(localStorage.getItem("ou-j-en-suis")||"{}");const text=["MON BILAN PERSONNEL",...areas.map(a=>a[0]+": "+((d.ratings||{})[a[0]]||5)+"/10"),"","MES RÉFLEXIONS",...qs.map((q,i)=>q.q+"\n"+(answers[i]||"")), "","Question du jour : "+(d.journal||""),"Priorité : "+(d.priority||""),"Pourquoi : "+(d.reason||""),"Action : "+(d.action||""),"Quand : "+(d.when||"")].join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:"text/plain;charset=utf-8"}));a.download="mon-bilan-personnel.txt";a.click();URL.revokeObjectURL(a.href)};
+$("clear").onclick=()=>{if(confirm("Effacer toutes les réflexions enregistrées dans ce navigateur ?")){localStorage.removeItem("ou-j-en-suis");location.reload()}};
+renderQ();
+</script>
+</body>
+</html>
